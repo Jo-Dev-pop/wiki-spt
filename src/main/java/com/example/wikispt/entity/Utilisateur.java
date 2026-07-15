@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -37,6 +36,7 @@ public class Utilisateur extends AbstractAuditingEntity {
     @Column(nullable = false, length = 20)
     private StatutCompte statut = StatutCompte.ACTIF;
 
+    @Column(nullable = false)
     private int tentativesEchouees = 0;
 
     @Column(name = "date_verrouillage")
@@ -58,5 +58,19 @@ public class Utilisateur extends AbstractAuditingEntity {
     public void verrouiller() {
         statut = StatutCompte.VERROUILLE;
         dateVerrouillage = Instant.now();
+    }
+
+    public void deverrouiller() {
+        this.statut = StatutCompte.ACTIF;
+        this.tentativesEchouees = 0;
+        this.dateVerrouillage = null;
+    }
+
+    public void incrementerTentatives() {
+        this.tentativesEchouees++;
+    }
+
+    public void reinitialiserTentatives() {
+        this.tentativesEchouees = 0;
     }
 }
