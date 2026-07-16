@@ -1,0 +1,199 @@
+/*VARIABLES*/
+:root{
+    --primary-blue:#0A3D91;
+    --primary-orange:#F58220;
+    --background:#F4F7FC;
+    --text:#2C2C2C;
+    --border:#E5E7EB;
+    --white:#FFFFFF;
+}
+
+/*RESET*/
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#F5F7FB,#EDF2F8);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/*CARTE*/
+
+.login-card{
+    width:1000px;
+    max-width:95%;
+    min-height:600px;
+    display:flex;
+    background:white;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:
+            0 20px 50px rgba(0,0,0,.15);
+}
+
+/*PARTIE GAUCHE*/
+
+.left-panel{
+    width:45%;
+    background:var(--primary-blue);
+    color:white;
+    padding:50px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.logo{
+    text-align:center;
+}
+
+.logo img{
+    width:140px;
+    margin-bottom:20px;
+}
+
+.logo h2{
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.logo p{
+    opacity:.85;
+    line-height:1.7;
+}
+
+
+.presentation h3{
+    font-size:2rem;
+    margin-bottom:20px;
+}
+
+.presentation p{
+    opacity:.85;
+    line-height:1.8;
+}
+
+.features{
+    display:flex;
+    gap:15px;
+    margin-top:40px;
+}
+
+.feature-card{
+    flex:1;
+    background:rgba(255,255,255,.12);
+    border-radius:15px;
+    padding:20px;
+}
+
+.feature-card h3{
+    color:var(--primary-orange);
+    margin-bottom:8px;
+}
+
+.feature-card span{
+    font-size:.9rem;
+}
+
+/*PARTIE DROITE*/
+
+.right-panel{
+    width:55%;
+    padding:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.right-panel h1{
+    color:var(--text);
+    font-weight:700;
+}
+
+.subtitle{
+    color:#666;
+    margin-bottom:35px;
+}
+
+.form-label{
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.form-control{
+    height:50px;
+    border-radius:10px;
+}
+
+.input-group-text{
+    background:white;
+    border-right:none;
+}
+
+.form-control{
+    border-left:none;
+}
+
+.form-control:focus{
+    box-shadow:none;
+    border-color:var(--primary-orange);
+}
+
+.btn-login{
+    background:var(--primary-orange);
+    color:white;
+    border:none;
+    height:50px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-login:hover{
+    background:#df6f10;
+    transform:translateY(-2px);
+}
+
+.separator{
+    text-align:center;
+    margin:30px 0;
+    color:#888;
+    font-size:.9rem;
+}
+
+.separator::before,
+.separator::after{
+    content:"";
+    display:inline-block;
+    width:70px;
+    height:1px;
+    background:#ddd;
+    margin:0 12px;
+    vertical-align:middle;
+}
+
+/*RESPONSIVE*/
+
+@media(max-width:900px){
+
+    .login-card{
+        flex-direction:column;
+    }
+
+    .left-panel,
+    .right-panel{
+        width:100%;
+    }
+
+    .left-panel{
+        padding:35px;
+    }
+
+}

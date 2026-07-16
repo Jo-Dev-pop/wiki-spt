@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion | Wiki-SPT</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <!-- Partie gauche -->
+        <div class="left-panel">
+            <div class="logo">
+
+                <img th:src="@{/images/logo-poste.png}" alt="Logo La Poste">
+
+                <h2>Wiki-SPT</h2>
+
+                <p>
+                    Plateforme collaborative de gestion des connaissances
+                </p>
+
+            </div>
+
+            <div class="presentation">
+
+                <h2>
+                    Partagez les connaissances
+                    en toute simplicité
+                </h2>
+
+                <p>
+                    Plateforme collaborative de gestion des connaissances
+                    permettant de créer, partager et organiser les informations
+                    au sein de la SPT.
+                </p>
+
+            </div>
+
+            <div class="features">
+
+                <div class="feature-card">
+                    <h3>100%</h3>
+                    <span>Collaboration</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3>24/7</h3>
+                    <span>Disponibilité</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Partie droite -->
+        <div class="right-panel">
+
+            <h2>Bienvenue</h2>
+
+            <p class="subtitle">
+                Connectez-vous à votre espace
+            </p>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="mb-3">
+
+                    <label>Email</label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+
+                        <input
+                                type="email"
+                                name="username"
+                                class="form-control"
+                                placeholder="Votre adresse e-mail"
+                                required>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label>Mot de passe</label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-lock"></i>
+                        </span>
+
+                        <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Votre mot de passe"
+                                required>
+
+                        <button
+                                type="button"
+                                class="btn btn-outline-secondary"
+                                id="togglePassword">
+
+                            <i class="bi bi-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button
+                        class="btn btn-login w-100">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                    Se connecter
+
+                </button>
+
+            </form>
+
+            <div class="separator">
+
+                <span>Sécurisé par Spring Security</span>
+
+            </div>
+
+            <div class="text-center mt-4 text-muted small">
+                Accès réservé au personnel autorisé de la Société des Postes du Togo.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+
+</html>
