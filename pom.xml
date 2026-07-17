@@ -11,6 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>wiki-spt</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>wiki-spt</name>
     <description>wiki-spt</description>
     <url/>

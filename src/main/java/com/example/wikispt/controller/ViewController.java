@@ -30,9 +30,4 @@ public class ViewController {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
-
 }

@@ -10,12 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import com.example.wikispt.security.CustomAuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,23 +39,36 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
+
+                        // Ressources publiques
                         .requestMatchers(
-                                "/",
                                 "/login",
-                                "/register",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
+
+                        // Administration
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMINISTRATEUR")
+
+                        // Lecteurs et contributeurs
+                        .requestMatchers("/app/**")
+                        .hasAnyRole("LECTEUR", "CONTRIBUTEUR")
+
+                        // Toute autre requête nécessite une authentification
+                        .anyRequest()
+                        .authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(successHandler)
+                        .failureUrl("/login?error")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
 
