@@ -14,6 +14,8 @@ public interface UtilisateurService {
 
     UtilisateurDto update(Long id, UtilisateurDto utilisateurDto);
 
-    void delete(Long id);
+    void desactiver(Long id);
+
+    void reactiver(Long id);
 
 }

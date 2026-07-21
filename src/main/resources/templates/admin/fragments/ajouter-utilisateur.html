@@ -1,14 +1,18 @@
 <div class="card">
 
     <div class="card-header bg-warning text-white">
-        <h4 class="mb-0">
-            Ajouter un utilisateur
+        <h4 class="mb-0"
+            th:text="${utilisateur.id == null} ?
+             'Ajouter un utilisateur'
+             : 'Modifier un utilisateur'">
         </h4>
     </div>
 
     <div class="card-body">
 
         <form th:action="@{/admin/utilisateurs}" method="post" th:object="${utilisateur}">
+
+            <input type="hidden" th:field="*{id}">
 
             <div class="row">
 
@@ -97,7 +101,9 @@
 
                     <i class="bi bi-check-circle"></i>
 
-                    Enregistrer
+                    <span th:text="${utilisateur.id == null} ?
+                        'Enregistrer'
+                        : 'Mettre à jour'"></span>
 
                 </button>
 

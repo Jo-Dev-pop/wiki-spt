@@ -8,6 +8,7 @@ import com.example.wikispt.service.UtilisateurService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.wikispt.enums.StatutCompte;
 
 import java.util.List;
 
@@ -39,8 +40,24 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurDto save(UtilisateurDto utilisateurDto) {
 
-        Utilisateur utilisateur = utilisateurMapper.toEntity(utilisateurDto);
-        utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+        Utilisateur utilisateur;
+
+        if (utilisateurDto.getId() != null) {
+
+            utilisateur = utilisateurRepository.findById(utilisateurDto.getId())
+                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
+            utilisateur.setNom(utilisateurDto.getNom());
+            utilisateur.setPrenom(utilisateurDto.getPrenom());
+            utilisateur.setEmail(utilisateurDto.getEmail());
+            utilisateur.setRole(utilisateurDto.getRole());
+            utilisateur.setStatut(utilisateurDto.getStatut());
+
+        } else {
+
+            utilisateur = utilisateurMapper.toEntity(utilisateurDto);
+
+        }
 
         utilisateur = utilisateurRepository.save(utilisateur);
 
@@ -63,9 +80,24 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void desactiver(Long id) {
 
-        utilisateurRepository.deleteById(id);
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
+        utilisateur.setStatut(StatutCompte.BLOQUE);
+
+        utilisateurRepository.save(utilisateur);
+    }
+
+    @Override
+    public void reactiver(Long id) {
+
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
+        utilisateur.setStatut(StatutCompte.ACTIF);
+
+        utilisateurRepository.save(utilisateur);
     }
 }
