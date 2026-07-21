@@ -1,0 +1,117 @@
+<div class="card">
+
+    <div class="card-header bg-warning text-white">
+        <h4 class="mb-0">
+            Ajouter un utilisateur
+        </h4>
+    </div>
+
+    <div class="card-body">
+
+        <form th:action="@{/admin/utilisateurs}" method="post" th:object="${utilisateur}">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label>Nom</label>
+
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{nom}"
+                           required>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label>Prénom</label>
+
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{prenom}"
+                           required>
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Email</label>
+
+                <input type="email"
+                       class="form-control"
+                       th:field="*{email}"
+                       required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Mot de passe</label>
+
+                <input type="password"
+                       class="form-control"
+                       th:field="*{motDePasse}"
+                       required>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label>Rôle</label>
+
+                    <select class="form-select"
+                            th:field="*{role}">
+
+                        <option value="LECTEUR">Lecteur</option>
+                        <option value="CONTRIBUTEUR">Contributeur</option>
+                        <option value="ADMINISTRATEUR">Administrateur</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label>Statut</label>
+
+                    <select class="form-select"
+                            th:field="*{statut}">
+
+                        <option value="ACTIF">Actif</option>
+                        <option value="BLOQUE">Bloqué</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+
+                <button class="btn btn-warning">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Enregistrer
+
+                </button>
+
+                <a th:href="@{/admin/utilisateurs}"
+                   class="btn btn-secondary">
+
+                    Annuler
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
