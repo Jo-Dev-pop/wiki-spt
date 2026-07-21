@@ -2,15 +2,16 @@ package com.example.wikispt.service.impl;
 
 import com.example.wikispt.dto.UtilisateurDto;
 import com.example.wikispt.entity.Utilisateur;
+import com.example.wikispt.enums.StatutCompte;
 import com.example.wikispt.mapper.UtilisateurMapper;
 import com.example.wikispt.repository.UtilisateurRepository;
 import com.example.wikispt.service.UtilisateurService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.example.wikispt.enums.StatutCompte;
-
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +22,27 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<UtilisateurDto> findAll() {
-        return utilisateurRepository.findAll()
-                .stream()
-                .map(utilisateurMapper::toDto)
-                .toList();
+    public Page<UtilisateurDto> findAll(int page, int size) {
+
+        return utilisateurRepository
+                .findAll(PageRequest.of(page, size))
+                .map(utilisateurMapper::toDto);
+
+    }
+
+    @Override
+    public Page<UtilisateurDto> rechercher(String motCle, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return utilisateurRepository
+                .findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        motCle,
+                        motCle,
+                        motCle,
+                        pageable
+                )
+                .map(utilisateurMapper::toDto);
     }
 
     @Override
@@ -57,6 +74,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             utilisateur = utilisateurMapper.toEntity(utilisateurDto);
 
+            if (utilisateur.getMotDePasse() != null) {
+                utilisateur.setMotDePasse(
+                        passwordEncoder.encode(utilisateur.getMotDePasse())
+                );
+            }
+
+            if (utilisateur.getStatut() == null) {
+                utilisateur.setStatut(StatutCompte.ACTIF);
+            }
         }
 
         utilisateur = utilisateurRepository.save(utilisateur);
@@ -73,6 +99,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateur.setNom(utilisateurDto.getNom());
         utilisateur.setPrenom(utilisateurDto.getPrenom());
         utilisateur.setEmail(utilisateurDto.getEmail());
+        utilisateur.setRole(utilisateurDto.getRole());
+        utilisateur.setStatut(utilisateurDto.getStatut());
 
         utilisateur = utilisateurRepository.save(utilisateur);
 

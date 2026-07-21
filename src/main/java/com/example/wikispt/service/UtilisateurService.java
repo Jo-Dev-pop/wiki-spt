@@ -1,12 +1,13 @@
 package com.example.wikispt.service;
 
 import com.example.wikispt.dto.UtilisateurDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface UtilisateurService {
 
-    List<UtilisateurDto> findAll();
+    Page<UtilisateurDto> findAll(int page, int size);
+
+    Page<UtilisateurDto> rechercher(String motCle, int page, int size);
 
     UtilisateurDto findById(Long id);
 
@@ -17,5 +18,4 @@ public interface UtilisateurService {
     void desactiver(Long id);
 
     void reactiver(Long id);
-
 }

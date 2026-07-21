@@ -51,6 +51,45 @@
 
         </div>
 
+        <div class="card mb-4 shadow-sm">
+
+            <div class="card-body">
+
+                <form th:action="@{/admin/utilisateurs}"
+                      method="get">
+
+                    <div class="input-group">
+
+                        <input
+                                type="text"
+                                class="form-control"
+                                name="motCle"
+                                th:value="${motCle}"
+                                placeholder="Rechercher par nom, prénom ou email">
+
+                        <button class="btn btn-warning">
+
+                            <i class="bi bi-search"></i>
+
+                            Rechercher
+
+                        </button>
+
+                        <a th:href="@{/admin/utilisateurs}"
+                           class="btn btn-secondary">
+
+                            Réinitialiser
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
         <table class="table table-hover align-middle">
 
             <thead>
@@ -75,7 +114,7 @@
 
             <tbody>
 
-            <tr th:each="utilisateur : ${utilisateurs}">
+            <tr th:each="utilisateur : ${pageUtilisateurs.content}">
 
                 <td th:text="${utilisateur.nom}"></td>
 
@@ -121,6 +160,45 @@
             </tbody>
 
         </table>
+
+        <nav class="mt-4">
+
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item"
+                    th:classappend="${pageUtilisateurs.first} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/admin/utilisateurs(page=${pageUtilisateurs.number-1})}">
+                        Précédent
+                    </a>
+
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0,pageUtilisateurs.totalPages-1)}"
+                    th:classappend="${i==pageUtilisateurs.number}? 'active'">
+
+                    <a class="page-link"
+                       th:text="${i+1}"
+                       th:href="@{/admin/utilisateurs(page=${i})}">
+                    </a>
+
+                </li>
+
+                <li class="page-item"
+                    th:classappend="${pageUtilisateurs.last} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{/admin/utilisateurs(page=${pageUtilisateurs.number+1})}">
+                        Suivant
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
 
     </div>
 
