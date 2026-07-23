@@ -1,0 +1,80 @@
+<div class="card">
+
+    <div class="card-header bg-warning text-white">
+
+        <h4 class="mb-0">
+
+            Catégorie
+
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <form th:action="@{/admin/categories}"
+              method="post"
+              th:object="${categorie}">
+
+            <input type="hidden"
+                   th:field="*{id}">
+
+            <div class="mb-3">
+
+                <label>Nom</label>
+
+                <input class="form-control"
+                       th:field="*{nom}"
+                       required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Description</label>
+
+                <textarea class="form-control"
+                          rows="4"
+                          th:field="*{description}">
+                </textarea>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Catégorie parente</label>
+
+                <select class="form-select"
+                        th:field="*{parentId}">
+
+                    <option value="">
+                        Aucune
+                    </option>
+
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.nom}">
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button class="btn btn-warning">
+
+                Enregistrer
+
+            </button>
+
+            <a th:href="@{/admin/categories}"
+               class="btn btn-secondary">
+
+                Annuler
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

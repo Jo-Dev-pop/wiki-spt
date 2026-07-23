@@ -1,9 +1,7 @@
 package com.example.wikispt.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Categorie extends AbstractAuditingEntity{
-
-    //attributs
+@EqualsAndHashCode(callSuper = true)
+public class Categorie extends AbstractAuditingEntity {
 
     @Column(nullable = false, length = 100)
     private String nom;
@@ -24,12 +21,13 @@ public class Categorie extends AbstractAuditingEntity{
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Categorie sousCategorie;   // relation récursive
+    private Categorie parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Categorie> sousCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "categorie")
     private List<Article> articles = new ArrayList<>();
-
-    //methodes
 
     public void ajouterArticle(Article article) {
         articles.add(article);
