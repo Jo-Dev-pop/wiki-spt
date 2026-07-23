@@ -1,0 +1,41 @@
+<div class="card shadow">
+
+    <div class="card-header bg-warning text-white">
+
+        <h3 th:text="${article.titre}"></h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <p>
+
+            <strong>Catégorie :</strong>
+
+            <span th:text="${article.categorieNom}"></span>
+
+        </p>
+
+        <p>
+
+            <strong>Auteur :</strong>
+
+            <span th:text="${article.contributeurNom}"></span>
+
+        </p>
+
+        <hr>
+
+        <div style="white-space: pre-wrap"
+             th:text="${article.contenu}">
+        </div>
+
+        <hr>
+
+        <strong>Mots clés :</strong>
+
+        <span th:text="${article.motsCles}"></span>
+
+    </div>
+
+</div>

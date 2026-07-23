@@ -1,0 +1,93 @@
+<div class="card shadow">
+
+    <div class="card-header bg-warning text-white">
+
+        <h4 class="mb-0"
+            th:text="${article.id==null} ? 'Nouvel article' : 'Modifier un article'">
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <form th:action="@{/admin/articles}"
+              th:object="${article}"
+              method="post">
+
+            <input type="hidden"
+                   th:field="*{id}">
+
+            <div class="mb-3">
+
+                <label>Titre</label>
+
+                <input class="form-control"
+                       th:field="*{titre}"
+                       required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Catégorie</label>
+
+                <select class="form-select"
+                        th:field="*{categorieId}"
+                        required>
+
+                    <option value="">
+                        Choisir...
+                    </option>
+
+                    <option
+                            th:each="categorie:${categories}"
+                            th:value="${categorie.id}"
+                            th:text="${categorie.nom}">
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Mots clés</label>
+
+                <input class="form-control"
+                       placeholder="java,spring,thymeleaf"
+                       th:field="*{motsCles}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Contenu</label>
+
+                <textarea
+                        rows="15"
+                        class="form-control"
+                        th:field="*{contenu}">
+                </textarea>
+
+            </div>
+
+            <button class="btn btn-warning">
+
+                <i class="bi bi-check-circle"></i>
+
+                Enregistrer
+
+            </button>
+
+            <a th:href="@{/admin/articles}"
+               class="btn btn-secondary">
+
+                Annuler
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,10 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="card shadow">
 
-</body>
-</html>
+    <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+
+        <h4 class="mb-0">
+            Gestion des articles
+        </h4>
+
+        <a th:href="@{/admin/articles/nouveau}"
+           class="btn btn-light">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Nouvel article
+
+        </a>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="get"
+              th:action="@{/admin/articles}"
+              class="row mb-4">
+
+            <div class="col-md-10">
+
+                <input
+                        type="text"
+                        class="form-control"
+                        name="motCle"
+                        th:value="${motCle}"
+                        placeholder="Rechercher un article...">
+
+            </div>
+
+            <div class="col-md-2">
+
+                <button class="btn btn-warning w-100">
+
+                    Rechercher
+
+                </button>
+
+            </div>
+
+        </form>
+
+        <table class="table table-hover align-middle">
+
+            <thead>
+
+            <tr>
+
+                <th>Titre</th>
+
+                <th>Catégorie</th>
+
+                <th>Auteur</th>
+
+                <th>Statut</th>
+
+                <th width="220">Actions</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:each="article : ${pageArticles.content}">
+
+                <td th:text="${article.titre}"></td>
+
+                <td th:text="${article.categorieNom}"></td>
+
+                <td th:text="${article.contributeurNom}"></td>
+
+                <td>
+
+                    <span
+                            th:if="${article.statut.name()=='PUBLIE'}"
+                            class="badge bg-success">
+
+                        Publié
+
+                    </span>
+
+                    <span
+                            th:if="${article.statut.name()=='EN_ATTENTE'}"
+                            class="badge bg-warning text-dark">
+
+                        En attente
+
+                    </span>
+
+                    <span
+                            th:if="${article.statut.name()=='REJETE'}"
+                            class="badge bg-danger">
+
+                        Rejeté
+
+                    </span>
+
+                    <span
+                            th:if="${article.statut.name()=='DESACTIVE'}"
+                            class="badge bg-secondary">
+
+                        Désactivé
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <a
+                            th:href="@{'/admin/articles/modifier/' + ${article.id}}"
+                            class="btn btn-sm btn-warning">
+
+                        <i class="bi bi-pencil"></i>
+
+                    </a>
+
+                    <a
+                            th:href="@{'/admin/articles/supprimer/' + ${article.id}}"
+                            class="btn btn-sm btn-danger"
+                            onclick="return confirm('Supprimer cet article ?')">
+
+                        <i class="bi bi-trash"></i>
+
+                    </a>
+
+                    <a
+                            th:href="@{'/admin/articles/' + ${article.id}}"
+                            class="btn btn-sm btn-info text-white">
+
+                        <i class="bi bi-eye"></i>
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <nav>
+
+            <ul class="pagination justify-content-center">
+
+                <li
+                        class="page-item"
+                        th:classappend="${pageArticles.first}? 'disabled'">
+
+                    <a
+                            class="page-link"
+                            th:href="@{/admin/articles(page=${pageArticles.number-1})}">
+
+                        Précédent
+
+                    </a>
+
+                </li>
+
+                <li
+                        class="page-item"
+                        th:each="i : ${#numbers.sequence(0,pageArticles.totalPages-1)}"
+                        th:classappend="${i==pageArticles.number} ? 'active'">
+
+                    <a
+                            class="page-link"
+                            th:text="${i+1}"
+                            th:href="@{/admin/articles(page=${i})}">
+
+                    </a>
+
+                </li>
+
+                <li
+                        class="page-item"
+                        th:classappend="${pageArticles.last}? 'disabled'">
+
+                    <a
+                            class="page-link"
+                            th:href="@{/admin/articles(page=${pageArticles.number+1})}">
+
+                        Suivant
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</div>
