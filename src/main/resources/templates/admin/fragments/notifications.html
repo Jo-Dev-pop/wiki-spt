@@ -1,0 +1,14 @@
+<h2 class="mb-4"><i class="bi bi-bell-fill"></i> Notifications</h2>
+
+<div class="list-group">
+    <a th:each="n : ${pageNotifications.content}"
+       th:href="@{'/admin/notifications/lue/' + ${n.id}}"
+       class="list-group-item list-group-item-action"
+       th:classappend="${n.lu} ? '' : 'list-group-item-warning'">
+        <div class="d-flex justify-content-between">
+            <span th:text="${n.message}">Message</span>
+            <small th:text="${#temporals.format(n.createdAt, 'dd/MM/yyyy HH:mm')}">date</small>
+        </div>
+    </a>
+    <p th:if="${pageNotifications.empty}" class="text-muted">Aucune notification.</p>
+</div>

@@ -2,6 +2,7 @@ package com.example.wikispt.service.impl;
 
 import com.example.wikispt.dto.CategorieDto;
 import com.example.wikispt.entity.Categorie;
+import com.example.wikispt.enums.TypeAction;
 import com.example.wikispt.mapper.CategorieMapper;
 import com.example.wikispt.repository.CategorieRepository;
 import com.example.wikispt.service.CategorieService;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import com.example.wikispt.entity.Utilisateur;
+import com.example.wikispt.service.HistoriqueService;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class CategorieServiceImpl implements CategorieService {
 
     private final CategorieRepository categorieRepository;
     private final CategorieMapper categorieMapper;
-
+    private final HistoriqueService historiqueService;
     @Override
     public Page<CategorieDto> findAll(int page, int size) {
 
@@ -94,13 +97,29 @@ public class CategorieServiceImpl implements CategorieService {
                 .orElseThrow(() -> new RuntimeException("Catégorie introuvable"));
 
         if (!categorie.getArticles().isEmpty()) {
-
-            throw new RuntimeException("Impossible de supprimer une catégorie contenant des articles.");
-
+            throw new RuntimeException(
+                    "Impossible de supprimer : " + categorie.getArticles().size() +
+                            " article(s) appartiennent à cette catégorie.");
         }
+
+        if (!categorie.getSousCategories().isEmpty()) {
+            throw new RuntimeException(
+                    "Impossible de supprimer : cette catégorie contient " +
+                            categorie.getSousCategories().size() + " sous-catégorie(s).");
+        }
+
+        historiqueService.enregistrer(TypeAction.SUPPRESSION_CATEGORIE,
+                "Suppression de la catégorie « " + categorie.getNom() + " »",
+                utilisateurConnecteCourant());
 
         categorieRepository.delete(categorie);
 
+    }
+
+    private Utilisateur utilisateurConnecteCourant() {
+        var auth = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication();
+        return (Utilisateur) auth.getPrincipal();
     }
 
     @Override

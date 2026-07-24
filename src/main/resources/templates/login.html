@@ -79,6 +79,9 @@
                 Connectez-vous à votre espace
             </p>
 
+            <div class="alert alert-warning" th:if="${param.expired}">
+                Votre session a expiré après 15 minutes d'inactivité. Merci de vous reconnecter.
+            </div>
             <form th:action="@{/login}" method="post">
 
                 <div class="mb-3">

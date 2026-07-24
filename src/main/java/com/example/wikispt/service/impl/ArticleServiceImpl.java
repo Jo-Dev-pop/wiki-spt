@@ -4,12 +4,16 @@ import com.example.wikispt.dto.ArticleDto;
 import com.example.wikispt.entity.Article;
 import com.example.wikispt.entity.Categorie;
 import com.example.wikispt.entity.Utilisateur;
+import com.example.wikispt.enums.Role;
 import com.example.wikispt.enums.StatutArticle;
+import com.example.wikispt.enums.TypeAction;
 import com.example.wikispt.mapper.ArticleMapper;
 import com.example.wikispt.repository.ArticleRepository;
 import com.example.wikispt.repository.CategorieRepository;
 import com.example.wikispt.repository.UtilisateurRepository;
 import com.example.wikispt.service.ArticleService;
+import com.example.wikispt.service.HistoriqueService;
+import com.example.wikispt.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +29,9 @@ public class ArticleServiceImpl implements ArticleService {
     private final CategorieRepository categorieRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final ArticleMapper articleMapper;
+    private final NotificationService notificationService;
+    private final HistoriqueService historiqueService;
+
 
     @Override
     public Page<ArticleDto> findAll(int page, int size) {
@@ -111,6 +118,18 @@ public class ArticleServiceImpl implements ArticleService {
 
         article = articleRepository.save(article);
 
+        boolean nouveauArticle = (dto.getId() == null);
+        article = articleRepository.save(article);
+
+        if (contributeur.getRole() != Role.ADMINISTRATEUR) {
+            notificationService.notifierSoumissionAuxAdmins(article, nouveauArticle);
+            historiqueService.enregistrer(
+                    nouveauArticle ? TypeAction.SOUMISSION_ARTICLE : TypeAction.MODIFICATION_ARTICLE,
+                    (nouveauArticle ? "Soumission" : "Modification") + " de l'article « " + article.getTitre() + " »",
+                    contributeur
+            );
+        }
+
         return articleMapper.toDto(article);
 
     }
@@ -124,28 +143,41 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void approuver(Long id) {
-
         Article article = articleRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Article introuvable"));
+                .orElseThrow(() -> new RuntimeException("Article introuvable"));
 
         article.publier();
-
         articleRepository.save(article);
 
+        notificationService.notifierPublication(article);
+        historiqueService.enregistrer(
+                TypeAction.PUBLICATION_ARTICLE,
+                "Publication de l'article « " + article.getTitre() + " »",
+                utilisateurConnecteCourant() // voir ci-dessous
+        );
     }
 
     @Override
     public void rejeter(Long id, String motif) {
-
         Article article = articleRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Article introuvable"));
+                .orElseThrow(() -> new RuntimeException("Article introuvable"));
 
         article.rejeter(motif);
-
         articleRepository.save(article);
 
+        notificationService.notifierRejet(article, motif);
+        historiqueService.enregistrer(
+                TypeAction.REJET_ARTICLE,
+                "Rejet de l'article « " + article.getTitre() + " » : " + motif,
+                utilisateurConnecteCourant()
+        );
+    }
+
+    // petit helper pour récupérer l'admin qui vient d'agir
+    private Utilisateur utilisateurConnecteCourant() {
+        var auth = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication();
+        return (Utilisateur) auth.getPrincipal();
     }
 
 }

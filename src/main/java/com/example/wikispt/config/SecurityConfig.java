@@ -60,6 +60,9 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
+                .sessionManagement(session -> session
+                        .invalidSessionUrl("/login?expired")
+                )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(successHandler)

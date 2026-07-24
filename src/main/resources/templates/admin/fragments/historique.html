@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<h2 class="mb-4"><i class="bi bi-clock-history"></i> Historique des actions</h2>
 
-</body>
-</html>
+<table class="table table-hover align-middle">
+    <thead>
+    <tr>
+        <th>Date &amp; heure</th>
+        <th>Action</th>
+        <th>Description</th>
+        <th>Auteur</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="h : ${pageHistorique.content}">
+        <td th:text="${#temporals.format(h.createdAt, 'dd/MM/yyyy HH:mm:ss')}">date</td>
+        <td><span class="badge bg-secondary" th:text="${h.action}">ACTION</span></td>
+        <td th:text="${h.description}">description</td>
+        <td th:text="${h.acteur != null ? h.acteur.prenom + ' ' + h.acteur.nom : 'Système'}">acteur</td>
+    </tr>
+    <tr th:if="${pageHistorique.empty}">
+        <td colspan="4" class="text-muted">Aucun historique pour le moment.</td>
+    </tr>
+    </tbody>
+</table>

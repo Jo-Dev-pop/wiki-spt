@@ -18,5 +18,4 @@ public interface ArticleService {
     void approuver(Long id);
 
     void rejeter(Long id, String motif);
-
 }
