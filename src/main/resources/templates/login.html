@@ -82,6 +82,15 @@
             <div class="alert alert-warning" th:if="${param.expired}">
                 Votre session a expiré après 15 minutes d'inactivité. Merci de vous reconnecter.
             </div>
+            <div class="alert alert-danger" th:if="${param.error != null and param.error[0] == 'locked'}">
+                Compte verrouillé après 3 tentatives échouées. Réessayez dans 5 minutes.
+            </div>
+            <div class="alert alert-success" th:if="${param.logout}">
+                Vous avez été déconnecté avec succès.
+            </div>
+            <div class="alert alert-danger" th:if="${param.error != null and param.error[0] != 'locked'}">
+                Email ou mot de passe incorrect.
+            </div>
             <form th:action="@{/login}" method="post">
 
                 <div class="mb-3">

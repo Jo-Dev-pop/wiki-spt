@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -92,8 +93,7 @@ public class ArticleServiceImpl implements ArticleService {
                 Arrays.stream(dto.getMotsCles().split(","))
                         .map(String::trim)
                         .filter(s -> !s.isEmpty())
-                        .toList()
-
+                        .collect(Collectors.toList())
         );
 
         Categorie categorie = categorieRepository

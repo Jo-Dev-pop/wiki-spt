@@ -1,5 +1,6 @@
 package com.example.wikispt.config;
 
+import com.example.wikispt.security.CustomAuthenticationFailureHandler;
 import com.example.wikispt.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,12 +63,18 @@ public class SecurityConfig {
                         .authenticated()
                 )
                 .sessionManagement(session -> session
-                        .invalidSessionUrl("/login?expired")
+                        .invalidSessionStrategy((request, response) -> {
+                            if (request.getRequestURI().endsWith("/login")) {
+                                response.sendRedirect(request.getContextPath() + "/login");
+                            } else {
+                                response.sendRedirect(request.getContextPath() + "/login?expired");
+                            }
+                        })
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(successHandler)
-                        .failureUrl("/login?error")
+                        .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
