@@ -15,4 +15,6 @@ public class CategorieDto {
 
     private String parentNom;
 
+    private int nombreArticles;
+
 }

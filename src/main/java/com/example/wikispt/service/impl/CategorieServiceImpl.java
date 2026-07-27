@@ -2,16 +2,16 @@ package com.example.wikispt.service.impl;
 
 import com.example.wikispt.dto.CategorieDto;
 import com.example.wikispt.entity.Categorie;
+import com.example.wikispt.entity.Utilisateur;
 import com.example.wikispt.enums.TypeAction;
 import com.example.wikispt.mapper.CategorieMapper;
 import com.example.wikispt.repository.CategorieRepository;
 import com.example.wikispt.service.CategorieService;
+import com.example.wikispt.service.HistoriqueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import com.example.wikispt.entity.Utilisateur;
-import com.example.wikispt.service.HistoriqueService;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class CategorieServiceImpl implements CategorieService {
     public Page<CategorieDto> findAll(int page, int size) {
 
         return categorieRepository.findAll(PageRequest.of(page, size))
-                .map(categorieMapper::toDto);
+                .map(this::toDtoAvecCompte);
 
     }
 
@@ -35,7 +35,7 @@ public class CategorieServiceImpl implements CategorieService {
 
         return categorieRepository.findAll()
                 .stream()
-                .map(categorieMapper::toDto)
+                .map(this::toDtoAvecCompte)
                 .toList();
 
     }
@@ -43,7 +43,7 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public CategorieDto findById(Long id) {
 
-        return categorieMapper.toDto(
+        return toDtoAvecCompte(
 
                 categorieRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Catégorie introuvable"))
@@ -127,8 +127,14 @@ public class CategorieServiceImpl implements CategorieService {
 
         return categorieRepository
                 .findByNomContainingIgnoreCase(motCle, PageRequest.of(page, size))
-                .map(categorieMapper::toDto);
+                .map(this::toDtoAvecCompte);
 
+    }
+
+    private CategorieDto toDtoAvecCompte(Categorie categorie) {
+        CategorieDto dto = categorieMapper.toDto(categorie);
+        dto.setNombreArticles(categorie.getArticles().size());
+        return dto;
     }
 
 }

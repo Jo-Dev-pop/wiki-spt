@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,10 +90,11 @@ public class ArticleServiceImpl implements ArticleService {
         article.setContenu(dto.getContenu());
 
         article.setMotsCles(
-
-                Arrays.stream(dto.getMotsCles().split(","))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
+                Arrays.stream(dto.getTitre().split("\\s+"))
+                        .map(String::toLowerCase)
+                        .map(mot -> mot.replaceAll("[^a-zà-ÿ0-9]", ""))
+                        .filter(mot -> mot.length() > 2)
+                        .distinct()
                         .collect(Collectors.toList())
         );
 
@@ -173,11 +175,36 @@ public class ArticleServiceImpl implements ArticleService {
         );
     }
 
+    @Override
+    public List<ArticleDto> findAllArticle() {
+        List<Article> articles = articleRepository.findAll();
+        if (articles != null && !articles.isEmpty()) {
+            return articles.stream()
+                    .map(articleMapper::toDto)
+                    .collect(Collectors.toList());
+        }
+        return List.of((ArticleDto) articleMapper.toDtoList(articles));
+    }
+
     // petit helper pour récupérer l'admin qui vient d'agir
     private Utilisateur utilisateurConnecteCourant() {
         var auth = org.springframework.security.core.context.SecurityContextHolder
                 .getContext().getAuthentication();
         return (Utilisateur) auth.getPrincipal();
+    }
+
+    // ArticleServiceImpl.java
+    @Override
+    public Page<ArticleDto> findAllPublies(int page, int size) {
+        return articleRepository.findByStatut(StatutArticle.PUBLIE, PageRequest.of(page, size))
+                .map(articleMapper::toDto);
+    }
+
+    @Override
+    public Page<ArticleDto> rechercherPublies(String motCle, int page, int size) {
+        return articleRepository.findByStatutAndTitreContainingIgnoreCase(
+                        StatutArticle.PUBLIE, motCle, PageRequest.of(page, size))
+                .map(articleMapper::toDto);
     }
 
 }

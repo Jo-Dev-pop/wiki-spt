@@ -1,7 +1,9 @@
 package com.example.wikispt.controller;
 
 import com.example.wikispt.dto.ArticleDto;
+import com.example.wikispt.entity.Article;
 import com.example.wikispt.entity.Utilisateur;
+import com.example.wikispt.mapper.ArticleMapper;
 import com.example.wikispt.service.ArticleService;
 import com.example.wikispt.service.CategorieService;
 import com.example.wikispt.service.UtilisateurService;
@@ -12,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/articles")
 @RequiredArgsConstructor
@@ -20,37 +25,43 @@ public class ArticleController {
     private final ArticleService articleService;
     private final CategorieService categorieService;
     private final UtilisateurService utilisateurService;
+    private final ArticleMapper articleMapper;
 
-    @GetMapping
-    public String listeArticles(
-
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(required = false) String motCle,
-
-            Model model) {
-
-        if (motCle != null && !motCle.isBlank()) {
-
-            model.addAttribute(
-                    "pageArticles",
-                    articleService.rechercher(motCle, page, size));
-
-        } else {
-
-            model.addAttribute(
-                    "pageArticles",
-                    articleService.findAll(page, size));
-
-        }
-
-        model.addAttribute("motCle", motCle);
-
-        model.addAttribute("content",
-                "admin/fragments/articles");
-
-        return "admin/dashboard";
-
+//    @GetMapping
+//    public String listeArticles(
+//
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "5") int size,
+//            @RequestParam(required = false) String motCle,
+//
+//            Model model) {
+//
+//        if (motCle != null && !motCle.isBlank()) {
+//
+//            model.addAttribute(
+//                    "pageArticles",
+//                    articleService.rechercher(motCle, page, size));
+//
+//        } else {
+//
+//            model.addAttribute(
+//                    "pageArticles",
+//                    articleService.findAll(page, size));
+//
+//        }
+//
+//        model.addAttribute("motCle", motCle);
+//
+//        model.addAttribute("content",
+//                "admin/fragments/articles");
+//
+//        return "admin/dashboard";
+//
+//    }
+    @GetMapping("/listArticle")
+    public List<ArticleDto> listeArticles() {
+        List<ArticleDto> articles = articleService.findAllArticle();
+        return articles;
     }
 
     @GetMapping("/nouveau")

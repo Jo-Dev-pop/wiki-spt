@@ -1,107 +1,114 @@
+:root {
+    --bleu-poste: #0B3D78;
+    --bleu-poste-clair: #1B5FAE;
+    --orange-poste: #F58220;
+    --bg-main: #F5F6F8;
+    --text-main: #212529;
+}
+
 body{
-
     margin:0;
-
-    background:#F5F6F8;
-
+    background: var(--bg-main);
     font-family:Segoe UI,sans-serif;
-
+    color: var(--text-main);
 }
 
 .wrapper{
-
     display:flex;
-
     min-height:100vh;
-
 }
 
 .sidebar{
-
     width:270px;
-
-    background:#343A40;
-
+    background: linear-gradient(180deg, var(--bleu-poste) 0%, var(--bleu-poste-clair) 100%);
     display:flex;
-
     flex-direction:column;
-
     justify-content:space-between;
-
     padding:30px 20px;
-
 }
 
 .logo{
-
     text-align:center;
-
     color:white;
-
     margin-bottom:50px;
+}
 
+.logo img {
+    background: #ffffff;
+    padding: 8px;
+    border-radius: 50%;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+    border: 3px solid var(--orange-poste);
 }
 
 .logo h4{
-
     margin-top:15px;
-
     font-weight:bold;
-
 }
 
 .sidebar-link{
-
     display:flex;
-
     align-items:center;
-
     gap:15px;
-
     color:white;
-
     text-decoration:none;
-
     padding:15px;
-
     margin-bottom:15px;
-
     border-radius:12px;
-
     transition:.25s;
-
     font-size:17px;
-
 }
 
 .sidebar-link i{
-
     font-size:22px;
-
 }
 
 .sidebar-link:hover{
-
-    background:#F58220;
-
+    background: var(--orange-poste);
     color:white;
-
 }
 
 .content{
-
     flex:1;
-
     padding:35px;
-
 }
 
 .card{
-
     border:none;
-
     border-radius:15px;
-
     box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
 
+/* Cartes de statistiques du tableau de bord : effet au survol */
+.card-stat {
+    transition: transform .2s ease, box-shadow .2s ease;
+    cursor: default;
+}
+
+.card-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .12);
+}
+
+/* En-tête de carte aux couleurs de la SPT */
+.card-header-brand {
+    background: var(--orange-poste);
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+/* Cartes façon "dossier" (catégories, articles en grille) */
+.folder-card {
+    border-radius: 15px;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.folder-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .12);
+}
+
+.folder-icon {
+    font-size: 2.5rem;
+    color: var(--orange-poste);
 }

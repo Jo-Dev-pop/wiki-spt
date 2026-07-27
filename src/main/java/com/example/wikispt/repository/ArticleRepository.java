@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    long countByStatut(StatutArticle statut);
+
     Page<Article> findByTitreContainingIgnoreCase(
             String titre,
             Pageable pageable
@@ -27,6 +29,12 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByContributeur(
             Utilisateur contributeur,
+            Pageable pageable
+    );
+
+    Page<Article> findByStatutAndTitreContainingIgnoreCase(
+            StatutArticle statut,
+            String titre,
             Pageable pageable
     );
 

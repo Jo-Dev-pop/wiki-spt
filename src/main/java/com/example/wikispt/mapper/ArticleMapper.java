@@ -5,6 +5,8 @@ import com.example.wikispt.entity.Article;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ArticleMapper {
 
@@ -28,5 +30,8 @@ public interface ArticleMapper {
     @Mapping(target = "deleted", ignore = true)
 
     Article toEntity(ArticleDto dto);
+
+    List<ArticleDto> toDtoList(List<Article> articles);
+
 
 }

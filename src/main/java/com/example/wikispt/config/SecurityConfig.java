@@ -1,6 +1,7 @@
 package com.example.wikispt.config;
 
 import com.example.wikispt.security.CustomAuthenticationFailureHandler;
+import com.example.wikispt.security.CustomAuthenticationSuccessHandler;
 import com.example.wikispt.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import com.example.wikispt.security.CustomAuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
@@ -47,12 +47,21 @@ public class SecurityConfig {
                                 "/login",
                                 "/css/**",
                                 "/js/**",
-                                "/images/**"
+                                "/images/**",
+                                "/admin/article"
                         ).permitAll()
 
                         // Administration
                         .requestMatchers("/admin/**")
                         .hasRole("ADMINISTRATEUR")
+
+                        .requestMatchers(
+                                "/app/articles/nouveau",
+                                "/app/articles/modifier/**")
+                        .hasRole("CONTRIBUTEUR")
+
+                        .requestMatchers("/app/**")
+                        .hasAnyRole("LECTEUR", "CONTRIBUTEUR")
 
                         // Lecteurs et contributeurs
                         .requestMatchers("/app/**")

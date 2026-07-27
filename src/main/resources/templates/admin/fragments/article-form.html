@@ -1,0 +1,25 @@
+<h2 class="mb-4">Nouvel article</h2>
+<form method="post" th:action="@{/app/articles}" th:object="${article}">
+    <input th:field="*{id}" type="hidden">
+    <div class="mb-3">
+        <label>Titre</label>
+        <input class="form-control" required th:field="*{titre}" type="text">
+    </div>
+    <div class="mb-3">
+        <label>Catégorie</label>
+        <select class="form-select" required th:field="*{categorieId}">
+            <option th:each="c : ${categories}" th:text="${c.nom}" th:value="${c.id}"></option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Mots-clés (séparés par des virgules)</label>
+        <input class="form-control" th:field="*{motsCles}" type="text">
+    </div>
+    <div class="mb-3">
+        <label>Contenu</label>
+        <textarea class="form-control" required rows="10" th:field="*{contenu}"></textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">
+        <i class="bi bi-send"></i> Soumettre pour validation
+    </button>
+</form>
